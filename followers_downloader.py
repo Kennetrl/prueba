@@ -86,27 +86,75 @@ class FollowersDownloader:
 
             # 2. Intentar cerrar el pop-up "Guardar información de inicio de sesión"
             try:
-                now_not_btn_save = wait.until(EC.element_to_be_clickable((By.XPATH,
-                                                                          "//div[text()='Guardar información de inicio de sesión']/following-sibling::div//button[text()='Ahora no']")))
-                now_not_btn_save.click()
-                print("   -> Pop-up 'Guardar información' cerrado.")
+                # Esperar un poco más para que aparezcan los pop-ups
                 time.sleep(2)
-            except TimeoutException:
+                # Buscar el botón con múltiples estrategias
+                save_popup_selectors = [
+                    "//div[contains(text(), 'Guardar información')]/following-sibling::div//button[contains(text(), 'Ahora no')]",
+                    "//div[contains(text(), 'Save Your Login Info')]/following-sibling::div//button[contains(text(), 'Not Now')]",
+                    "//button[contains(text(), 'Ahora no')]",
+                    "//button[contains(text(), 'Not Now')]"
+                ]
+                
+                popup_closed = False
+                for selector in save_popup_selectors:
+                    try:
+                        elements = self.driver.find_elements(By.XPATH, selector)
+                        for element in elements:
+                            if element and element.is_displayed():
+                                self.driver.execute_script("arguments[0].click();", element)
+                                print("   -> Pop-up 'Guardar información' cerrado.")
+                                time.sleep(2)
+                                popup_closed = True
+                                break
+                        if popup_closed:
+                            break
+                    except Exception:
+                        continue
+            except Exception as e:
+                # Si no se puede cerrar, continuar de todas formas
                 pass
 
-                # 3. Intentar cerrar el pop-up "Activar notificaciones"
+            # 3. Intentar cerrar el pop-up "Activar notificaciones"
             try:
-                notification_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Ahora no']")))
-                notification_btn.click()
-                print("   -> Pop-up 'Notificaciones' cerrado.")
-                time.sleep(2)
-            except TimeoutException:
+                time.sleep(1)
+                notification_selectors = [
+                    "//button[contains(text(), 'Ahora no')]",
+                    "//button[contains(text(), 'Not Now')]",
+                    "//button[contains(text(), 'No ahora')]"
+                ]
+                
+                notification_closed = False
+                for selector in notification_selectors:
+                    try:
+                        elements = self.driver.find_elements(By.XPATH, selector)
+                        for element in elements:
+                            if element and element.is_displayed():
+                                self.driver.execute_script("arguments[0].click();", element)
+                                print("   -> Pop-up 'Notificaciones' cerrado.")
+                                time.sleep(2)
+                                notification_closed = True
+                                break
+                        if notification_closed:
+                            break
+                    except Exception:
+                        continue
+            except Exception as e:
+                # Si no se puede cerrar, continuar de todas formas
                 pass
 
             return True
 
         except Exception as e:
             print(f"❌ Fallo al detectar la sesión iniciada o al cerrar pop-ups: {e}")
+            # Aunque falle el cierre de pop-ups, si el login fue exitoso, continuar
+            try:
+                # Verificar si realmente estamos logueados
+                if "instagram.com" in self.driver.current_url and "login" not in self.driver.current_url:
+                    print("⚠️ Login exitoso pero no se pudieron cerrar algunos pop-ups. Continuando...")
+                    return True
+            except:
+                pass
             return False
 
     # --- Lógica de Búsqueda (Corregida con navegación directa) ---

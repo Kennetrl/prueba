@@ -73,10 +73,42 @@ class ProfileScraper:
             wait.until(lambda d: "instagram.com" in d.current_url and "login" not in d.current_url)
             time.sleep(3)
             print("✅ Login exitoso (Scraper).")
+            
+            # Intentar cerrar pop-ups si existen (sin bloquear si falla)
+            try:
+                time.sleep(2)
+                # Buscar y cerrar pop-ups de notificaciones
+                popup_selectors = [
+                    "//button[contains(text(), 'Ahora no')]",
+                    "//button[contains(text(), 'Not Now')]",
+                    "//button[contains(text(), 'No ahora')]"
+                ]
+                
+                for selector in popup_selectors:
+                    try:
+                        elements = self.driver.find_elements(By.XPATH, selector)
+                        for element in elements:
+                            if element and element.is_displayed():
+                                self.driver.execute_script("arguments[0].click();", element)
+                                time.sleep(1)
+                                break
+                    except Exception:
+                        continue
+            except Exception:
+                # Ignorar errores de pop-ups, no son críticos
+                pass
+            
             return True
 
-        except Exception:
-            print("❌ Fallo al detectar la sesión iniciada (Scraper).")
+        except Exception as e:
+            print(f"❌ Fallo al detectar la sesión iniciada (Scraper): {e}")
+            # Verificar si realmente estamos logueados
+            try:
+                if "instagram.com" in self.driver.current_url and "login" not in self.driver.current_url:
+                    print("⚠️ Login exitoso pero hubo un problema menor. Continuando...")
+                    return True
+            except:
+                pass
             return False
 
     def read_usernames_from_csv(self, filename: str) -> list[str]:
