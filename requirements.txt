@@ -1,0 +1,13 @@
+# requirements.txt
+
+# Para el scraping web y control del navegador
+selenium
+webdriver-manager
+
+# Para el manejo de datos (lectura de CSV y limpieza)
+pandas
+numpy
+openpyxl
+
+# Para la generación del gráfico de la Ley de Benford
+matplotlib
