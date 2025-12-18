@@ -60,7 +60,7 @@ class FollowersDownloader:
             user_input = wait.until(EC.presence_of_element_located((By.NAME, "username")))
             pass_input = wait.until(EC.presence_of_element_located((By.NAME, "password")))
         except Exception:
-            print("❌ Timeout: No se encontraron los campos de login.")
+            print("Timeout: No se encontraron los campos de login.")
             return False
 
         # Enviar credenciales
@@ -74,7 +74,7 @@ class FollowersDownloader:
             submit_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[./div[text()='Iniciar sesión']]")))
             submit_btn.click()
         except Exception:
-            print("❌ No se pudo hacer clic en el botón de login.")
+            print("No se pudo hacer clic en el botón de login.")
             return False
 
         # Manejo de pop-ups y espera al feed
@@ -146,12 +146,12 @@ class FollowersDownloader:
             return True
 
         except Exception as e:
-            print(f"❌ Fallo al detectar la sesión iniciada o al cerrar pop-ups: {e}")
+            print(f"Fallo al detectar la sesión iniciada o al cerrar pop-ups: {e}")
             # Aunque falle el cierre de pop-ups, si el login fue exitoso, continuar
             try:
                 # Verificar si realmente estamos logueados
                 if "instagram.com" in self.driver.current_url and "login" not in self.driver.current_url:
-                    print("⚠️ Login exitoso pero no se pudieron cerrar algunos pop-ups. Continuando...")
+                    print("⚠Login exitoso pero no se pudieron cerrar algunos pop-ups. Continuando...")
                     return True
             except:
                 pass
@@ -163,7 +163,7 @@ class FollowersDownloader:
         wait = WebDriverWait(self.driver, 15)
         profile_url = f"https://www.instagram.com/{username_objetivo}/"
 
-        print(f"🔍 Navegando directamente a: {profile_url}")
+        print(f"Navegando directamente a: {profile_url}")
         self.driver.get(profile_url)
 
         try:
@@ -172,7 +172,7 @@ class FollowersDownloader:
 
             # Comprobar si la página realmente cargó un perfil (Evita errores de "Page Not Found")
             if "page not found" in self.driver.page_source.lower() or "no se pudo encontrar" in self.driver.page_source.lower():
-                print(f"❌ Error: La URL {username_objetivo} no parece ser un perfil válido.")
+                print(f"Error: La URL {username_objetivo} no parece ser un perfil válido.")
                 return False
 
             print(f"✅ Perfil de @{username_objetivo} cargado con éxito.")
@@ -180,10 +180,10 @@ class FollowersDownloader:
             return True
 
         except TimeoutException:
-            print("❌ Timeout al cargar el perfil. No se encontró el header del perfil.")
+            print("Timeout al cargar el perfil. No se encontró el header del perfil.")
             return False
         except Exception as e:
-            print(f"❌ Error durante la navegación directa al perfil: {e}")
+            print(f" Error durante la navegación directa al perfil: {e}")
             return False
 
     # --- Guardado de Datos ---
@@ -196,7 +196,7 @@ class FollowersDownloader:
                 writer.writerows([[username] for username in data])
             print(f"\n🎉 Lista de usuarios guardada exitosamente en: **{filename}**")
         except Exception as e:
-            print(f"\n❌ Error al guardar el archivo CSV: {e}")
+            print(f"\nError al guardar el archivo CSV: {e}")
 
     # --- Lógica de Scroll y Extracción (Original) ---
     def _obtener_seguidos(self, limite=500) -> list[str]:
@@ -221,7 +221,7 @@ class FollowersDownloader:
                                                   ".//div[contains(@style,'height')]//div[contains(@style,'overflow')][1]")
 
             if not scroll_container:
-                print("❌ No se encontró el contenedor desplazable del modal.")
+                print("No se encontró el contenedor desplazable del modal.")
                 return []
 
             print("🌀 Contenedor desplazable detectado, comenzando scroll persistente...")
@@ -274,7 +274,7 @@ class FollowersDownloader:
             return seguidos_list
 
         except Exception as e:
-            print(f"❌ Error al obtener seguidos: {e}")
+            print(f"Error al obtener seguidos: {e}")
             return []
 
     # --- Método de Ejecución Principal ---
@@ -282,11 +282,11 @@ class FollowersDownloader:
         """Descarga la lista inicial de seguidos y la guarda en un CSV."""
 
         if not self._login_instagram():
-            print("❌ Login fallido. No se puede continuar.")
+            print("Login fallido. No se puede continuar.")
             return
 
         if not self._buscar_usuario(perfil_objetivo):
-            print("❌ No se pudo encontrar el usuario objetivo o cargar el perfil.")
+            print("No se pudo encontrar el usuario objetivo o cargar el perfil.")
             return
 
         print(f"Comenzando el scraping de seguidos de {perfil_objetivo}...")

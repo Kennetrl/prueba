@@ -101,7 +101,7 @@ class ProfileScraper:
             return True
 
         except Exception as e:
-            print(f"❌ Fallo al detectar la sesión iniciada (Scraper): {e}")
+            print(f"Fallo al detectar la sesión iniciada (Scraper): {e}")
             # Verificar si realmente estamos logueados
             try:
                 if "instagram.com" in self.driver.current_url and "login" not in self.driver.current_url:
@@ -124,10 +124,10 @@ class ProfileScraper:
             print(f"✅ Leídos {len(usernames)} usuarios de '{filename}'.")
             return usernames
         except FileNotFoundError:
-            print(f"❌ Error: Archivo '{filename}' no encontrado. Asegúrate de haber ejecutado la Fase 1.")
+            print(f"Error: Archivo '{filename}' no encontrado. Asegúrate de haber ejecutado la Fase 1.")
             return []
         except Exception as e:
-            print(f"❌ Error al leer el CSV: {e}")
+            print(f"Error al leer el CSV: {e}")
             return []
 
     def _extract_number_from_text(self, text: str) -> str:
@@ -326,7 +326,7 @@ class ProfileScraper:
                 writer.writerows(data)
             print(f"\n🎉 Resultados guardados exitosamente en: **{filename}**")
         except Exception as e:
-            print(f"\n❌ Error al guardar el archivo CSV: {e}")
+            print(f"\nError al guardar el archivo CSV: {e}")
 
     def _save_to_xlsx(self, data: list[dict], filename: str):
         """Guarda los datos en formato XLSX."""
@@ -338,7 +338,7 @@ class ProfileScraper:
             df.to_excel(filename, index=False, engine='openpyxl')
             print(f"\n🎉 Resultados guardados exitosamente en: **{filename}**")
         except Exception as e:
-            print(f"\n❌ Error al guardar el archivo XLSX: {e}")
+            print(f"\nError al guardar el archivo XLSX: {e}")
             # Fallback a CSV si falla XLSX
             csv_filename = filename.replace('.xlsx', '.csv')
             self._save_to_csv(data, csv_filename)

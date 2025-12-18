@@ -90,7 +90,7 @@ class MainApp:
             self._run_phase_2_scrape_counts()
             self._run_phase_3_analyze()
         else:
-            print("\n❌ Opción no válida. Por favor, selecciona 0, 1, 2 o 3.")
+            print("\n Opción no válida. Por favor, selecciona 0, 1, 2 o 3.")
 
 
 # ----------------------------------------------------------------------
