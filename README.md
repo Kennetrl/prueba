@@ -1,4 +1,4 @@
-# 🔍 Instagram Benford Analyzer
+# 🔍 Scraper con los métodos revisados
 
 Este proyecto es una herramienta de automatización y análisis estadístico diseñada para extraer información de perfiles de Instagram y validar la autenticidad de sus métricas utilizando la **Ley de Benford**.
 
