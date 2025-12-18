@@ -40,17 +40,17 @@ class MainApp:
         try:
             downloader.download_and_save_followers(self.target_account, self.limit, self.following_list_csv)
         except Exception as e:
-            print(f"⚠️ Error en la Fase 1: {e}")
+            print(f"Error en la Fase 1: {e}")
         finally:
             downloader.close_driver()
 
     def _run_phase_2_scrape_counts(self):
         """FASE 2: Recopilación de Información Completa de Perfiles."""
         if not os.path.exists(self.following_list_csv):
-            print(f"\n⚠️ Necesitas ejecutar la Fase 1 primero. Archivo '{self.following_list_csv}' no encontrado.")
+            print(f"\nNecesitas ejecutar la Fase 1 primero. Archivo '{self.following_list_csv}' no encontrado.")
             return
 
-        print("\n--- 🖱️ Fase 2: Recopilación de Información de Perfiles (Seguidores, Seguidos, Biografía) ---")
+        print("\n--- Fase 2: Recopilación de Información de Perfiles (Seguidores, Seguidos, Biografía) ---")
         scraper = ProfileScraper(self.username, self.password)
         usernames_to_count = scraper.read_usernames_from_csv(self.following_list_csv)
 
@@ -58,19 +58,19 @@ class MainApp:
             try:
                 scraper.scrape_follower_counts(usernames_to_count, self.output_data_file)
             except Exception as e:
-                print(f"⚠️ Error en la Fase 2: {e}")
+                print(f"Error en la Fase 2: {e}")
             finally:
                 scraper.close_driver()
         else:
-            print("❌ No hay usuarios para procesar. Terminando Fase 2.")
+            print("No hay usuarios para procesar. Terminando Fase 2.")
 
     def _run_phase_3_analyze(self):
         """FASE 3: Limpieza y Análisis de Benford."""
         if not os.path.exists(self.output_data_file):
-            print(f"\n⚠️ Necesitas ejecutar la Fase 2 primero. Archivo '{self.output_data_file}' no encontrado.")
+            print(f"\nNecesitas ejecutar la Fase 2 primero. Archivo '{self.output_data_file}' no encontrado.")
             return
 
-        print("\n--- 📈 Fase 3: Limpieza, Análisis de Benford y Gráfico ---")
+        print("\n--- Fase 3: Limpieza, Análisis de Benford y Gráfico ---")
         analyzer = DataAnalyzer(self.output_data_file)
         analyzer.clean_and_prepare_data()
         analyzer.analyze_and_plot_first_digit(self.graph_filename)
