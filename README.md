@@ -21,8 +21,8 @@ Se divide en tres fases modulares:
 ### Instalación de dependencias
 Ejecuta el siguiente comando en tu terminal para instalar las librerías necesarias:
 
-###Estrategia
-La mejor estrategia sería utilizar los datos de la Fase 2 para identificar palabras clave en su biografía (como "futbol") y cruzar esa información con su nivel de actividad social; si sus métricas de seguidores en la Fase 3 son consistentes y orgánicas según la Ley de Benford, podrías concluir que es una persona disciplinata y auténtica con quien podrías conectar ofreciéndole contenido o productos que resuenen con su rutina de bienestar, enfocándote en la calidad y la comunidad en lugar de solo en la apariencia.
+### Estrategia
+La mejor estrategia sería utilizar los datos de la Fase 2 para identificar palabras clave en su biografía (como "futbol") y cruzar esa información con su nivel de actividad social; si sus métricas de seguidores, podrías concluir que es una persona disciplinada y auténtica con quien podrías conectar ofreciéndole contenido o productos que resuenen con su rutina de bienestar, enfocándote en la calidad y la comunidad en lugar de solo en la apariencia.
 
 ```bash
 pip install selenium webdriver-manager pandas openpyxl
